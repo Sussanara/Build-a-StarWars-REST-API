@@ -1,74 +1,62 @@
-# Flask Boilerplate for Profesional Development
+## Paso 1: Crear mi estructura del proyecto (carpetas y archivos)
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/from-referrer/)
-<p align="center">
-    <a href="https://youtu.be/ORxQ-K3BzQA"><img height="200px" src="https://github.com/4GeeksAcademy/flask-rest-hello/blob/main/docs/assets/how-to.png?raw=true?raw=true" /></a>
-</p>
+    - proyecto
+        - src
+            app.py
+            models.py
+        - Pipfile
+        - .gitignore
+        
+## Paso 2: Activar el entorno virtual (pipenv)
 
-## Features
+    $ pipenv shell
 
-- Extensive documentation [here](https://start.4geeksacademy.com).
-- Integrated with Pipenv for package managing.
-- Fast deloyment to heroku with `$ pipenv run deploy`.
-- Use of `.env` file.
-- SQLAlchemy integration for database abstraction.
+## Paso 3: Instalar los modulos requeridos en el proyecto
 
-## Installation (automatic if you are using gitpod)
+    $ pipenv install flask flask-migrate flask-sqlalchemy
 
-> Important: The boiplerplate is made for python 3.7 but you can easily change the `python_version` on the Pipfile.
+## Paso 4: Configurar mi archivo principal (app.py)
 
-The following steps are automatically runned withing gitpod, if you are doing a local installation you have to do them manually:
+    from flask import Flask
 
-```sh
-pipenv install;
-mysql -u root -e "CREATE DATABASE example";
-pipenv run init;
-pipenv run migrate;
-pipenv run upgrade;
-```
+    app = Flask(__name__)
 
-## How to Start coding?
+## Paso 5A: Configurar el inicio de la app en archivo y ejecutar con python el archivo
 
-There is an example API working with an example database. All your application code should be written inside the `./src/` folder.
+Agregamos esto al final de mi documento
+    ...
+    app.config['DEBUG'] = True
+    app.config['ENV'] = 'development'
 
-- src/main.py (it's where your endpoints should be coded)
-- src/models.py (your database tables and serialization logic)
-- src/utils.py (some reusable classes and functions)
-- src/admin.py (add your models to the admin and manage your data easily)
+    if __name__ == '__main__':
+        app.run()
 
-For a more detailed explanation, look for the tutorial inside the `docs` folder.
+Ejecutarmos en el terminal:    
 
-## Remember to migrate every time you change your models
+    $ python src/app.py
 
-You have to migrate and upgrade the migrations for every update you make to your models:
-```
-$ pipenv run migrate (to make the migrations)
-$ pipenv run upgrade  (to update your databse with the migrations)
-```
+## Paso 5B: Configurar el comando flask en el terminal
 
+    $ export FLASK_APP=src/app.py
+    $ export FLASK_DEBUG=True
+    $ export FLASK_ENV=development
+    $ flask run    
 
-# Manual Installation for Ubuntu & Mac
+## Paso 6: Crear los modelos de la aplicaciones
 
-⚠️ Make sure you have `python 3.6+` and `MySQL` installed on your computer and MySQL is running, then run the following commands:
-```sh
-$ pipenv install (to install pip packages)
-$ pipenv run migrate (to create the database)
-$ pipenv run start (to start the flask webserver)
-```
+    from flask_sqlalchemy import SQLAlchemy
+    db = SQLAlchemy()
 
+    class ModelName(db.Model):
+        ....
 
-## Deploy to Heroku
+## Paso 7: Vincular los models con la aplicacion principal
 
-This template is 100% compatible with Heroku[https://www.heroku.com/], just make sure to understand and execute the following steps:
-
-```sh
-// Install heroku
-$ npm i heroku -g
-// Login to heroku on the command line
-$ heroku login -i
-// Create an application (if you don't have it already)
-$ heroku create <your_application_name>
-// Commit and push to heroku (commited your changes)
-$ git push heroku main
-```
-:warning: For a more detailed explanation on working with .env variables or the MySQL database [read the full guide](https://start.4geeksacademy.com/backend/deploy-heroku-mysql).
+    ...
+    from flask_migrate import Migrate
+    from models import db
+    ...
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    - A:
+        app.condig['SQLALCHEMY_DATABASE_URI'] = 'dialect+driver://user:pass@host:port/dbname' # mysql, postgresql, oralcel etc 
+    -    
