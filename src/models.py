@@ -122,5 +122,5 @@ class Vehicles(db.Model):
 
     def delete(self):
         db.session.delete(self)
-        db.session.commit()       
-
+        db.session.commit()
+        
